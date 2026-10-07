@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>reCAPTCHA Protected Page</title>
+
+    <!-- Replace with your actual SITE KEY -->
+    <script src="https://www.google.com/recaptcha/api.js?render=6Lflx-MtAAAAAJNt72AEHvVkH3j9MUkJC7mflqKz"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #111;
+        }
+
+        .card {
+            width: min(90%, 600px);
+            background: #fff;
+            padding: 45px 35px;
+            text-align: center;
+            border: 1px solid #e5e5e5;
+            border-radius: 14px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #555;
+        }
+
+        .badge-dot {
+            width: 7px;
+            height: 7px;
+            background: #22a06b;
+            border-radius: 50%;
+        }
+
+        h1 {
+            margin: 25px 0 10px;
+            font-size: 30px;
+        }
+
+        p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        #content {
+            display: none;
+        }
+
+        #error {
+            display: none;
+        }
+
+        .recaptcha {
+            margin-top: 30px;
+            font-size: 11px;
+            color: #777;
+            line-height: 1.5;
+        }
+
+        .recaptcha a {
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+
+        <!-- Checking -->
+        <div id="checking">
+            <div class="badge">
+                <span class="badge-dot"></span>
+                Checking security...
+            </div>
+
+            <h1>Verifying your browser</h1>
+
+            <p>
+                Please wait while we verify your browser.
+            </p>
+        </div>
+
+
+        <!-- Successful -->
+        <div id="content">
+
+            <div class="badge">
+                <span class="badge-dot"></span>
+                Protected by reCAPTCHA
+            </div>
+
+            <h1>This site is protected</h1>
+
+            <p>
+                Your browser has been verified successfully.
+            </p>
+
+            <div class="recaptcha">
+                This site is protected by reCAPTCHA and the
+                Google
+                <a href="https://policies.google.com/privacy" target="_blank">
+                    Privacy Policy
+                </a>
+                and
+                <a href="https://policies.google.com/terms" target="_blank">
+                    Terms of Service
+                </a>
+                apply.
+            </div>
+
+        </div>
+
+
+        <!-- Failed -->
+        <div id="error">
+
+            <div class="badge">
+                Verification failed
+            </div>
+
+            <h1>Verification failed</h1>
+
+            <p>
+                We couldn't verify your browser.
+                Please refresh the page and try again.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const SITE_KEY = "6Lflx-MtAAAAAJNt72AEHvVkH3j9MUkJC7mflqKz";
+
+        grecaptcha.ready(function () {
+
+            grecaptcha.execute(SITE_KEY, {
+                action: "page_access"
+            })
+
+            .then(function (token) {
+
+                console.log("reCAPTCHA token:", token);
+
+                /*
+                 * FRONTEND TEST ONLY
+                 *
+                 * We are not sending the token to Google
+                 * for secret-key verification yet.
+                 */
+
+                document.getElementById("checking").style.display = "none";
+
+                document.getElementById("content").style.display = "block";
+
+            })
+
+            .catch(function (error) {
+
+                console.error("reCAPTCHA error:", error);
+
+                document.getElementById("checking").style.display = "none";
+
+                document.getElementById("error").style.display = "block";
+
+            });
+
+        });
+
+    </script>
+
+</body>
+</html>
